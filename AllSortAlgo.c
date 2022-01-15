@@ -55,7 +55,6 @@ void bubble_sort(int arr[], int lenght)
 void selection_sort(int arr[], int n){
     int indexOfMin, temp;
     int count=0;
-    printf("Running Selection sort...\n");
     for (int i = 0; i < n-1; i++)
     {
         indexOfMin = i;
