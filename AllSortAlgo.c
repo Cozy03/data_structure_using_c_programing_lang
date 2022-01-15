@@ -59,9 +59,9 @@ void selection_sort(int arr[], int n){
     for (int i = 0; i < n-1; i++)
     {
         indexOfMin = i;
-        count++;
         for (int j = i+1; j < n; j++)
         {
+            count++;
             if(arr[j] < arr[indexOfMin]){
                 indexOfMin = j;
             }
