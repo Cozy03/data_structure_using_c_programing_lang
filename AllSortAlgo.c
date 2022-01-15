@@ -21,60 +21,79 @@ void printArray(int arr[], int lenght)
     }
     printf("\n");
 }
+//Function for copping one arrays element to anoter array
+void copy(int a[], int b[], int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        b[i] = a[i];
+    }
+}
 //a)Bubblesort Algorithm
 //Function for bubble sorting
-int *bubble_sort(int arr[], int lenght)
+void bubble_sort(int arr[], int lenght)
 {
-    int i, j;
+    int i, j, count = 0;
     for (i = 0; i < lenght - 1; i++)
     {
         for (j = 0; j < lenght - i - 1; j++) /*Here lenght-i-1 is used instead of lenght-1 
                                                   as already last i elements are sorted so no need 
                                                   to revisit them again.*/
         {
+            count++;
             if (arr[j] > arr[j + 1])
             {
                 swap(&arr[j], &arr[j + 1]);
             }
         }
     }
-    return arr;
+    printf("Number of times the elements were compared in this process is: %d \n", count);
 }
 //b)Selection Sort Algorithm
 //Function for Selection sorting
-int *selection_sort(int arr[], int n)
-{
-    int i, j, min_id;
-    for (i = 0; i < n - 1; i++)
+void selection_sort(int arr[], int n){
+    int indexOfMin, temp;
+    int count=0;
+    printf("Running Selection sort...\n");
+    for (int i = 0; i < n-1; i++)
     {
-        min_id = i;
-        for (j = i + 1; j < n; j++)
-            if (arr[j] < arr[min_id])
-                min_id = j;
-        swap(&arr[min_id], &arr[i]);
+        indexOfMin = i;
+        count++;
+        for (int j = i+1; j < n; j++)
+        {
+            if(arr[j] < arr[indexOfMin]){
+                indexOfMin = j;
+            }
+        }
+        // Swap arr[i] and A[indexOfMin]
+     swap(&arr[i],&arr[indexOfMin]);
     }
-    return arr;
+    printf("Number of times the elements were compared in this process is: %d \n", count);
 }
 //)c)Insertion Sort Algorithm
 //Function for Insertion Sorting
-int *insertion_sort(int arr[], int lenght)
+void insertion_sort(int arr[], int lenght)
 {
-    int i, j, temp;
+    int i, j, temp, count = 0;
     for (i = 1; i < lenght; i++)
     {
         temp = arr[i];
         j = i - 1;
         while (j >= 0 && arr[j] > temp)
         {
+            count++;
             arr[j + 1] = arr[j];
             j--;
         }
-        arr[j + 1] = temp; //Index is j+1 as j was decrimented by one position from the last largest value of temp
+        arr[j + 1] = temp; //Index is j+1 as j was decrimented by one position 
+                            // from the last largest value of temp
     }
-    return arr;
+    printf("Number of times the elements were compared in this process is: %d \n", count);
 }
 // d)Quick Sort Algorithm
 //i)Partition Function
+int qs_count=0;
 int partition(int arr[], int low, int high)
 {
     int pivot = arr[low];
@@ -85,10 +104,12 @@ int partition(int arr[], int low, int high)
         while (arr[i] <= pivot)
         {
             i++;
+            qs_count++;
         }
         while (arr[j] > pivot)
         {
             j--;
+            qs_count++;
         }
         if (i < j)
         {
@@ -100,7 +121,7 @@ int partition(int arr[], int low, int high)
     return j;
 }
 //ii)QuickSort Function
-int *quick_sort(int arr[], int low, int high)
+void quick_sort(int arr[], int low, int high)
 {
     int partition_id;
     if (low < high)
@@ -109,10 +130,10 @@ int *quick_sort(int arr[], int low, int high)
         quick_sort(arr, low, partition_id - 1);
         quick_sort(arr, partition_id + 1, high);
     }
-    return arr;
 }
 //e)MergeSort Algorithm
 //i)Merge Function
+int ms_count=0;
 void merge(int A[], int mid, int low, int high)
 {
     int i, j, k, B[100];
@@ -122,6 +143,7 @@ void merge(int A[], int mid, int low, int high)
 
     while (i <= mid && j <= high)
     {
+        ms_count++;
         if (A[i] < A[j])
         {
             B[k] = A[i];
@@ -153,7 +175,7 @@ void merge(int A[], int mid, int low, int high)
     }
 }
 //ii)Mergesort Function
-int *merge_sort(int arr[], int low, int high)
+void merge_sort(int arr[], int low, int high)
 {
     int mid;
     if (low < high)
@@ -163,13 +185,33 @@ int *merge_sort(int arr[], int low, int high)
         merge_sort(arr, mid + 1, high);
         merge(arr, mid, low, high);
     }
-    return arr;
 }
-//Main Function 
+//For better viewing just coloring the outpus
+void red () {
+  printf("\033[1;31m");
+}
+void purple(){
+    printf("\033[0;35m");
+}
+void green(){
+    printf("\033[0;32m");
+}
+
+void blue() {
+  printf("\033[0;34m");
+}
+void underline(){
+    printf("\e[4;30m");
+}
+
+void reset () {
+  printf("\033[0m");
+} 
+//Main Function
 void main()
 {
     int i, n;
-    int a[100];
+    int a[100], fresh[100];
     clock_t start, end;
     double cpu_time_used;
     printf("Enter the size of the array a: \n");
@@ -187,47 +229,94 @@ void main()
     printf("\n \n");
 
     //a. Bubble sort
+    underline();
     printf("a. Modified array after Bubble Sort algorithm:  \n");
+    copy(a, fresh, n);
+    blue();
     start = clock();
-    printArray(bubble_sort(a, n), n);
+    bubble_sort(fresh, n);
     end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken for Bubble Sort algorithm is(including printing of the array):%f  \n", cpu_time_used);
+    red();
+    printf("Time taken for Bubble Sort algorithm is:%f  \n", cpu_time_used);
+    purple();
+    printf("Modified Array:  \n");
+    green();
+    printArray(fresh, n);
+    reset();
     printf("\n \n");
 
     //b. Selection sort
+    underline();
     printf(" b. Modified array after Selection Sort algorithm:  \n");
+    copy(a, fresh, n);
+    blue();
     start = clock();
-    printArray(selection_sort(a, n), n);
+    selection_sort(fresh, n);
     end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken for Selection Sort algorithm is(including printing of the array):%f  \n", cpu_time_used);
+    red();
+    printf("Time taken for Selection Sort algorithm is:%f  \n", cpu_time_used);
+    purple();
+    printf("Modified Array:  \n");
+    green();
+    printArray(fresh, n);
+    reset();
     printf("\n \n");
 
     //c. Inserton sort
-    printf("c. Modified array after Insertion Sort algorithm:  \n");
+    underline();
+    printf("c. Insertion Sort algorithm:  \n");
+    copy(a, fresh, n);
+    blue();
     start = clock();
-    printArray(insertion_sort(a, n), n);
+    insertion_sort(fresh, n);
     end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken for Insertion Sort algorithm is(including printing of the array):%f  \n", cpu_time_used);
+    red();
+    printf("Time taken for Insertion Sort algorithm is:%f  \n", cpu_time_used);
+    purple();
+    printf("Modified Array:  \n");
+    green();
+    printArray(fresh, n);
+    reset();
     printf("\n \n");
 
     //d. Quick Sort
-    printf("d. Modified array after Quick Sort algorithm:  \n");
+    underline();
+    printf("d. Quick Sort algorithm:  \n");
+    copy(a, fresh, n);
     start = clock();
-    printArray(quick_sort(a, 0, n - 1), n);
+    quick_sort(fresh, 0, n - 1);
     end = clock();
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken for Quick Sort algorithm is(including printing of the array):%f  \n", cpu_time_used);
+    blue();
+    printf("Number of times the elements were compared in this process is: %d \n", qs_count);
+    red();
+    printf("Time taken for Quick Sort algorithm is:%f  \n", cpu_time_used);
+    purple();
+    printf("Modified Array:  \n");
+    green();
+    printArray(fresh, n);
+    reset();
     printf("\n \n");
-    
+
     //e. Merge Sort
+    underline();
     printf("e. Modified array after Merge Sort algorithm:  \n");
+    copy(a, fresh, n);
     start = clock();
-    printArray(merge_sort(a, 0, n - 1), n);
+    merge_sort(fresh, 0, n - 1);
     end = clock();
+    blue();
+    printf("Number of times the elements were compared in this process is: %d \n", ms_count);
     cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Time taken for Merge Sort algorithm is(including printing of the array):%f  \n", cpu_time_used);
+    red();
+    printf("Time taken for Merge Sort algorithm is:%f  \n", cpu_time_used);
+    purple();
+    printf("Modified Array:  \n");
+    green();
+    printArray(fresh, n);
+    reset();
     printf("\n \n");
 }
