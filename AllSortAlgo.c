@@ -65,7 +65,7 @@ void selection_sort(int arr[], int n){
                 indexOfMin = j;
             }
         }
-        // Swap arr[i] and A[indexOfMin]
+        // Swap arr[i] and arr[indexOfMin]
      swap(&arr[i],&arr[indexOfMin]);
     }
     printf("Number of times the elements were compared in this process is: %d \n", count);
