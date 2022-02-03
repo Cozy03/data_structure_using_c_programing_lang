@@ -87,6 +87,9 @@ void insertion_sort(int arr[], int lenght)
         }
         arr[j + 1] = temp; //Index is j+1 as j was decrimented by one position 
                             // from the last largest value of temp
+        if(temp>arr[j]){
+            count++;
+        }
     }
     printf("Number of times the elements were compared in this process is: %d \n", count);
 }
